@@ -17,7 +17,7 @@ appSync:
   authentication:
     type: AWS_LAMBDA
     config:
-      functionArn: 'arn:aws:lambda:ca-central-1:166083508693:function:ac-odh-app-sync-cabin-defects-authorizer-intca1-authorizer'
+      functionArn: 'arn:aws:lambda:ca-central-1:166083508693:function:employee-authorizer-intca1-authorizer'
       authorizerResultTtlInSeconds: 300 # Cache results for 5 minutes
       identityValidationExpression: ".*" # Adjust if you need strict validation
       
