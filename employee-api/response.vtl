@@ -1,0 +1,18 @@
+#set($employees = [])
+
+#foreach($employee in $context.result.employees)
+    $util.qr($employees.add({
+        "ID": $employee.ID,
+        "name": $employee.name,
+        "role": $employee.role,
+        "mobile": $employee.mobile
+    }))
+#end
+
+{
+    "employees": $util.toJson($employees),
+    "pagination": {
+        "nextPointer": 2,
+        "pageSize": 100
+    }
+}
