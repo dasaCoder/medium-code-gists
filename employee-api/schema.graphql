@@ -1,0 +1,35 @@
+type Query {
+    getEmployees(input: EmployeesInput!): EmployeesResponse!
+}
+
+input EmployeesInput {
+    ID: String!
+    fromDate: AWSDateTime!
+    toDate: AWSDateTime
+}
+
+type EmployeesResponse {
+    employees: [Employee!]!
+    pagination: PaginationInfo!
+}
+
+type Employee {
+    ID: String!
+    name: String!
+    role: String!
+    mobile: String!
+}
+
+type PaginationInfo {
+    nextPointer: Int
+    pageSize: Int!
+}
+
+type Error {
+    errorCode: Int!
+    message: String!
+    generatedOn: AWSDateTime!
+    transactionId: String!
+    correlationId: String
+    modelVersion: Int!
+}
