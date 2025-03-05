@@ -1,0 +1,26 @@
+#set($input = $context.arguments.input)
+
+## Validate FIN
+#if (!$input.ID || $input.ID.length() < 3)
+    $util.error("FIN must be at least 3 characters long")
+#end
+
+## Validate ID format (if it should be numeric)
+#if (!$input.ID.matches("^[0-9]+$"))
+    $util.error("FIN must contain only numbers")
+#end
+
+## Trim whitespace
+#set($sanitizedID = $input.ID.trim())
+
+{
+    "version": "2018-05-29",
+    "operation": "Invoke",
+    "payload": {
+        "input": {
+                "ID": $util.toJson($sanitizedID),
+                "fromDate": $util.toJson($input.fromDate),
+                "toDate": $util.toJson($input.toDate),
+          }
+    }
+}
