@@ -1,0 +1,41 @@
+service: employee-api-v1
+
+provider:
+  name: aws
+  stage: dev
+  architecture: x86_64
+  deploymentBucket:
+    name: reusable-deployment-bucket
+  runtime: nodejs18.x
+  region: us-east-1
+
+plugins:
+  - serverless-appsync-plugin
+
+appSync:
+  name: ${self:service}-${self:provider.stage}
+  schema: schema.graphql
+  resolvers:
+    Query.getCabinDefects:
+      kind: UNIT
+      request: request.vtl
+      response: response.vtl
+      dataSource:
+        type: 'AWS_LAMBDA'
+        config:
+          function:
+            timeout: 30
+            handler: 'functions/index.getEmployees'
+            vpc:
+              securityGroupIds:
+                - ${self:custom.defaultParams.${self:provider.stage}.SG}
+              subnetIds:
+                - ${self:custom.defaultParams.${self:provider.stage}.SUBNET_ID_A}
+                - ${self:custom.defaultParams.${self:provider.stage}.SUBNET_ID_B}
+                - ${self:custom.defaultParams.${self:provider.stage}.SUBNET_ID_D}
+            environment:
+              EMPLOYEES_API_BASE: ${self:custom.defaultParams.${self:provider.stage}.EMPLOYEES_API_BASE}
+              EMPLOYEES_API_CLIENT_ID: ${self:custom.defaultParams.${self:provider.stage}.EMPLOYEES_API_CLIENT_ID}
+              EMPLOYEES_API_CLIENT_SECRET: ${self:custom.defaultParams.${self:provider.stage}.EMPLOYEES_API_CLIENT_SECRET}
+              EMPLOYEES_API_SCOPE: ${self:custom.defaultParams.${self:provider.stage}.EMPLOYEES_API_SCOPE}
+              EMPLOYEES_AUTH_URL: ${self:custom.defaultParams.${self:provider.stage}.EMPLOYEES_AUTH_URL}
